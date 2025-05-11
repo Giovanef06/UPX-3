@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoWave - Histórico</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="header">📜 Histórico de Coletas</div>
+  <div class="container">
+    <ul>
+      <li>🗓️ 11/05/2025 - Lago 1 - 3g microplásticos</li>
+      <li>🗓️ 08/05/2025 - Rio Central - 1.2g microplásticos</li>
+      <li>🗓️ 02/05/2025 - Represa Verde - 2.8g microplásticos</li>
+    </ul>
+    <div class="center">
+      <button onclick="window.location.href='home.html'">Voltar</button>
+    </div>
+  </div>
+</body>
+</html>
