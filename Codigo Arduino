@@ -1,0 +1,56 @@
+#include <SoftwareSerial.h>
+#include <TinyGPS++.h>
+
+// Configuração do GPS
+static const int RXPin = 4, TXPin = 3; // RX do Arduino vai no TX do GPS, e vice-versa
+static const uint32_t GPSBaud = 9600;
+
+TinyGPSPlus gps;
+SoftwareSerial gpsSerial(RXPin, TXPin);
+
+// Pino da bomba (ligada via relé ou transistor)
+const int bombaPin = 7;
+
+// Tempo de coleta (em milissegundos) - ex: 10 segundos
+const unsigned long tempoColeta = 10000;
+
+void setup() {
+  Serial.begin(9600);
+  gpsSerial.begin(GPSBaud);
+
+  pinMode(bombaPin, OUTPUT);
+  digitalWrite(bombaPin, LOW);
+
+  Serial.println("EcoWave - Iniciando monitoramento");
+}
+
+void loop() {
+  // Espera até obter localização válida
+  while (gpsSerial.available() > 0) {
+    gps.encode(gpsSerial.read());
+
+    if (gps.location.isUpdated()) {
+      // Mostra dados GPS
+      Serial.print("Latitude: ");
+      Serial.println(gps.location.lat(), 6);
+      Serial.print("Longitude: ");
+      Serial.println(gps.location.lng(), 6);
+
+      // Aciona bomba
+      Serial.println("Iniciando coleta de água...");
+      digitalWrite(bombaPin, HIGH);
+      delay(tempoColeta);
+      digitalWrite(bombaPin, LOW);
+      Serial.println("Coleta finalizada.");
+
+      // Envia dados da coleta
+      Serial.print("Coleta realizada em: ");
+      Serial.print(gps.location.lat(), 6);
+      Serial.print(", ");
+      Serial.println(gps.location.lng(), 6);
+
+      // Espera antes da próxima coleta (ex: 5 minutos)
+      delay(300000); // 5 min = 300.000 ms
+    }
+  }
+}
